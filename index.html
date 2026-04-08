@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achyut Sharma — Builder, Coder, Robotics Nerd</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg2: #12121a;
+            --bg3: #1a1a26;
+            --accent: #00e09e;
+            --accent2: #00b8ff;
+            --accent3: #ff6b35;
+            --text: #e0e0e8;
+            --text-dim: #8888a0;
+            --border: #2a2a3a;
+            --card: #14141f;
+            --glow: rgba(0, 224, 158, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* === GRAIN OVERLAY === */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* === NAV === */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.7);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+        }
+
+        .logo span { color: var(--text-dim); }
+
+        .nav-links { display: flex; gap: 28px; }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 120px 60px 80px;
+            position: relative;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hero-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: 36px;
+        }
+
+        .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0a0f;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px var(--glow);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* === GLOW ORB === */
+        .orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .orb-1 {
+            background: var(--accent);
+            top: 10%;
+            right: -5%;
+        }
+
+        .orb-2 {
+            background: var(--accent2);
+            bottom: 20%;
+            left: -10%;
+        }
+
+        /* === SECTIONS === */
+        section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 60px;
+        }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .section-desc {
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            max-width: 600px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+        }
+
+        /* === ABOUT === */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .about-text {
+            color: var(--text-dim);
+            font-size: 1.02rem;
+            line-height: 1.8;
+        }
+
+        .about-text p { margin-bottom: 16px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        .stat-card:hover { border-color: var(--accent); }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 6px;
+        }
+
+        /* === PROJECTS === */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover::before { opacity: 1; }
+        .project-card:hover { border-color: var(--border); transform: translateY(-4px); }
+
+        .project-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--accent);
+            background: rgba(0, 224, 158, 0.08);
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .project-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .project-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .tech-pill {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--bg3);
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+        }
+
+        .project-card.featured {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .project-card.featured .project-tag { background: rgba(255, 107, 53, 0.1); color: var(--accent3); }
+        .project-card.featured::before { background: linear-gradient(90deg, var(--accent3), var(--accent)); }
+
+        /* === FTC === */
+        .ftc-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .ftc-info p {
+            color: var(--text-dim);
+            font-size: 1.02rem;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .ftc-highlights {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .ftc-highlight {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .ftc-highlight:hover { border-color: var(--accent); }
+
+        .ftc-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(0, 224, 158, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .ftc-highlight h4 { font-size: 0.95rem; margin-bottom: 2px; }
+        .ftc-highlight p { color: var(--text-dim); font-size: 0.85rem; margin: 0; }
+
+        /* === SKILLS === */
+        .skills-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            padding: 10px 20px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: var(--text-dim);
+            background: var(--card);
+            transition: all 0.25s;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(0, 224, 158, 0.05);
+        }
+
+        /* === FOOTER === */
+        footer {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 60px 60px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .footer-links { display: flex; gap: 20px; }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--accent); }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            nav { padding: 14px 20px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { font-size: 0.8rem; }
+            .hero { padding: 120px 24px 60px; }
+            section { padding: 60px 24px; }
+            .about-content, .ftc-split { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-card.featured { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 16px; padding: 30px 24px 40px; }
+        }
+
+        /* === ANIMATIONS === */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.7s forwards;
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <nav>
+        <div class="logo">achyut<span>.dev</span></div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#ftc">FTC</a>
+            <a href="#skills">Skills</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-tag fade-up">14 y/o builder from frisco, tx</div>
+        <h1 class="fade-up delay-1">I build <span class="highlight">robots</span> and <span class="highlight">software</span> that actually do stuff.</h1>
+        <p class="hero-desc fade-up delay-2">Hey, I'm Achyut. I'm a maker, coder, and robotics nerd who's been building things since I could hold a screwdriver. I do everything from PCB design to full-stack web dev — and I'm not even in high school yet.</p>
+        <div class="hero-btns fade-up delay-3">
+            <a href="#projects" class="btn btn-primary">See My Work</a>
+            <a href="https://github.com/Duck-things" class="btn btn-outline">GitHub ↗</a>
+        </div>
+    </div>
+
+    <section id="about">
+        <div class="section-label fade-up">About Me</div>
+        <div class="section-title fade-up delay-1">just a kid who likes building things</div>
+        <div class="about-content">
+            <div class="about-text fade-up delay-2">
+                <p>So basically, I love making stuff. I got into robotics through FTC and just never stopped. Now I spend most of my free time either designing PCBs in KiCad, 3D printing parts, writing code, or working on my robot SafePath.</p>
+                <p>I'm part of Hack Club's Flavortown program which is super cool because I get to work on open source projects and hang out with other teen makers. I also do web development, Chrome extensions, and I'm currently building a JARVIS-style AI assistant on a Raspberry Pi because why not.</p>
+                <p>When I'm not building something, I'm probably researching what I'm gonna build next. My parents are probably tired of me ordering parts off Amazon at this point lol.</p>
+            </div>
+            <div class="stats-grid fade-up delay-3">
+                <div class="stat-card">
+                    <div class="stat-num">2+</div>
+                    <div class="stat-label">Years Building</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">5+</div>
+                    <div class="stat-label">Projects Shipped</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">8</div>
+                    <div class="stat-label">FTC Team Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">76</div>
+                    <div class="stat-label">Days Logged (SafePath)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="section-label fade-up">Projects</div>
+        <div class="section-title fade-up delay-1">stuff i've actually built</div>
+        <p class="section-desc fade-up delay-2">These aren't just school assignments. These are real projects I've spent hundreds of hours on because I genuinely wanted to make them.</p>
+
+        <div class="projects-grid">
+            <div class="project-card featured fade-up delay-3">
+                <div>
+                    <div class="project-tag">🤖 Main Project</div>
+                    <h3>SafePath</h3>
+                    <p>An autonomous home safety robot designed to help elderly people. It uses LiDAR, computer vision, and AI to detect falls and navigate around homes. I built this because my grandmother lives far from family and I wanted something that could actually keep her safe. Has a telescoping screen that goes up 4ft, a camera mast that extends to 10ft, tank treads like the Amazon Astro, and Face ID. Currently working on turning it into a real product I can sell.</p>
+                    <div class="project-tech">
+                        <span class="tech-pill">Orange Pi 5 Plus</span>
+                        <span class="tech-pill">ROS2</span>
+                        <span class="tech-pill">LiDAR</span>
+                        <span class="tech-pill">KiCad</span>
+                        <span class="tech-pill">STM32</span>
+                        <span class="tech-pill">Python</span>
+                        <span class="tech-pill">OpenSCAD</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-num">57%</div><div class="stat-label">Fall Detection Accuracy</div></div>
+                        <div class="stat-card"><div class="stat-num">40</div><div class="stat-label">Test Trials</div></div>
+                        <div class="stat-card"><div class="stat-num">76</div><div class="stat-label">Day Dev Log</div></div>
+                        <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">Product Tiers</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card fade-up delay-2">
+                <div class="project-tag">🧠 AI</div>
+                <h3>JARVIS AI Assistant</h3>
+                <p>Building my own JARVIS on a Raspberry Pi 5 with a 5-inch LCD. It uses Ollama for local AI and the Anthropic API for the smart stuff, with voice recognition and text-to-speech. Dark themed UI because obviously.</p>
+                <div class="project-tech">
+                    <span class="tech-pill">Raspberry Pi 5</span>
+                    <span class="tech-pill">Ollama</span>
+                    <span class="tech-pill">PyQt5</span>
+                    <span class="tech-pill">Whisper</span>
+                </div>
+            </div>
+
+            <div class="project-card fade-up delay-3">
+                <div class="project-tag">🔍 Chrome Extension</div>
+                <h3>Ghost Job Detector</h3>
+                <p>A Chrome extension (v2.5.0) that helps job seekers spot fake or ghost job listings. Because people wasting their time applying to jobs that don't actually exist is messed up and someone should do something about it.</p>
+                <div class="project-tech">
+                    <span class="tech-pill">JavaScript</span>
+                    <span class="tech-pill">Chrome APIs</span>
+                    <span class="tech-pill">HTML/CSS</span>
+                </div>
+            </div>
+
+            <div class="project-card fade-up delay-2">
+                <div class="project-tag">⏱️ Productivity</div>
+                <h3>WakaTime/Hackatime Tracker</h3>
+                <p>A universal desktop app that tracks coding time for Hack Club's Flavortown program. Built it so I (and other Hack Clubbers) could get proper credit for the hours we put in.</p>
+                <div class="project-tech">
+                    <span class="tech-pill">Desktop App</span>
+                    <span class="tech-pill">Hack Club</span>
+                </div>
+            </div>
+
+            <div class="project-card fade-up delay-3">
+                <div class="project-tag">📱 Mobile</div>
+                <h3>SafePath Mobile App</h3>
+                <p>Companion app for SafePath with emergency notifications, contact management, alert history, and quiet hours. Built in Kotlin with TCP sockets for real-time communication with the robot.</p>
+                <div class="project-tech">
+                    <span class="tech-pill">Kotlin</span>
+                    <span class="tech-pill">Android</span>
+                    <span class="tech-pill">TCP Sockets</span>
+                    <span class="tech-pill">SQLite</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ftc">
+        <div class="section-label fade-up">FTC Robotics</div>
+        <div class="section-title fade-up delay-1">CoZmicMonkeyZ — Team 32329</div>
+
+        <div class="ftc-split">
+            <div class="ftc-info fade-up delay-2">
+                <p>I'm on FTC Team 32329, CoZmicMonkeyZ, based in Frisco, Texas. We're a community team of 8 — meaning no school backs us. Everything we do is funded by our parents and donations from people who believe in us.</p>
+                <p>We finished our rookie season and learned a TON. This upcoming 2026-2027 season, we're going for Regionals. We know we can do it — we just need the resources to get there.</p>
+                <p>Being on a community team is tough because you don't get free workshop space or a teacher to help organize stuff. But honestly, it also means we've had to figure everything out ourselves, which has made us way better engineers and problem solvers.</p>
+                <p>If you want to help us out, we're raising $3,500 for next season on Zeffy. Every dollar helps and goes directly to registration fees, parts, and getting us to competitions.</p>
+            </div>
+            <div class="ftc-highlights fade-up delay-3">
+                <div class="ftc-highlight">
+                    <div class="ftc-icon">🐒</div>
+                    <div>
+                        <h4>Team of 8</h4>
+                        <p>Small team, big ambitions</p>
+                    </div>
+                </div>
+                <div class="ftc-highlight">
+                    <div class="ftc-icon">🏠</div>
+                    <div>
+                        <h4>Community Team</h4>
+                        <p>No school funding — 100% self-supported</p>
+                    </div>
+                </div>
+                <div class="ftc-highlight">
+                    <div class="ftc-icon">🎯</div>
+                    <div>
+                        <h4>Goal: Regionals</h4>
+                        <p>2026-2027 season, let's go</p>
+                    </div>
+                </div>
+                <div class="ftc-highlight">
+                    <div class="ftc-icon">🔧</div>
+                    <div>
+                        <h4>Hands-On Engineering</h4>
+                        <p>CAD, 3D printing, coding, wiring — we do it all</p>
+                    </div>
+                </div>
+                <div class="ftc-highlight">
+                    <div class="ftc-icon">📍</div>
+                    <div>
+                        <h4>Frisco, Texas</h4>
+                        <p>Representing the DFW maker scene</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="section-label fade-up">Skills & Tools</div>
+        <div class="section-title fade-up delay-1">things i actually know how to use</div>
+        <p class="section-desc fade-up delay-2">Not just listing stuff to look cool. I've genuinely used all of these in real projects.</p>
+
+        <div class="skills-wrap fade-up delay-3">
+            <div class="skill-tag">Python</div>
+            <div class="skill-tag">Java</div>
+            <div class="skill-tag">Kotlin</div>
+            <div class="skill-tag">JavaScript</div>
+            <div class="skill-tag">HTML/CSS</div>
+            <div class="skill-tag">React</div>
+            <div class="skill-tag">ROS2</div>
+            <div class="skill-tag">KiCad (PCB Design)</div>
+            <div class="skill-tag">OpenSCAD</div>
+            <div class="skill-tag">Onshape</div>
+            <div class="skill-tag">3D Printing</div>
+            <div class="skill-tag">Laser Cutting</div>
+            <div class="skill-tag">STM32</div>
+            <div class="skill-tag">Raspberry Pi</div>
+            <div class="skill-tag">Orange Pi</div>
+            <div class="skill-tag">Arduino</div>
+            <div class="skill-tag">LiDAR / SLAM</div>
+            <div class="skill-tag">Computer Vision</div>
+            <div class="skill-tag">Android Studio</div>
+            <div class="skill-tag">Git / GitHub</div>
+            <div class="skill-tag">Linux</div>
+            <div class="skill-tag">FTC Programming</div>
+            <div class="skill-tag">PID Control</div>
+            <div class="skill-tag">Sensor Fusion</div>
+            <div class="skill-tag">Chrome Extensions</div>
+            <div class="skill-tag">TCP Sockets</div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-text">© 2026 Achyut Sharma. Built by hand, not by committee.</div>
+        <div class="footer-links">
+            <a href="https://github.com/Duck-things">GitHub</a>
+            <a href="https://www.zeffy.com/en-US/donation-form/cozmicmonkeyz-first-tech-challenge-2026-2027-season-fund">Donate</a>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Allow hero animations to play immediately
+        document.querySelectorAll('.hero .fade-up').forEach(el => {
+            el.style.animationPlayState = 'running';
+        });
+    </script>
+
+</body>
+</html>
